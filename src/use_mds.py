@@ -5,24 +5,32 @@ import pprint as p
 
 def create_matrix(data, targets):
   matrix = []
-  for i in range(0, len(targets)):
-    row = []
-    curr_row = targets[i]
-    for j in range(0, len(targets)):
-      curr_col = targets[j]
-      if curr_col == curr_row:
-        row.append(0)
-      for d in range(0, len(data)):
+  length = len(targets)
 
-        if curr_col in data[d]['keys'] and curr_row in data[d]['keys']:
-          row.append(data[d]['rssi'])
-          # del data[d]
-          # break
+  for r in range(0, length):
+    row = []
+    for c in range(0, length):
+      p1 = targets[r]
+      p2 = targets[c]
+      
+      for d in range(0, len(data)):
+        if p1 == data[d]['keys'][0]:
+          if p2 == data[d]['keys'][1]:
+            row.append(data[d]['rssi'])
+            break
+        elif p2 == data[d]['keys'][0]:
+          if p1 == data[d]['keys'][1]:
+            row.append(data[d]['rssi'])
+            break            
+        elif p1 == p2:
+          row.append(0)   
+          break           
       
     matrix.append(row)
     np.matrix = matrix
   print(type(np.matrix))
   print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in np.matrix]))
+  return np.matrix
 
 def unique_targets(data):
   unique_targets = []
@@ -42,4 +50,4 @@ def unique_targets(data):
 data = d.test01
 targets = unique_targets(data)
 print(f"targets = {targets}")
-create_matrix(data, targets)
+matrix = create_matrix(data, targets)
