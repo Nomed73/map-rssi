@@ -31,7 +31,7 @@ def log(targets, msg):
 '''
 def get_data(test): 
   data = prep_data(test)
-  # data = convert_rssi_inches(data)
+  data = convert_rssi_inches(data)
   return sorted(data, key=lambda d: d['rssi'])
 
 
@@ -258,7 +258,8 @@ def map_targets(targets):
   # Plotting
   plt.scatter(x_plots, y_plots)
   plt.axis('equal')
-  plt.title('Targets')
+  plt.title('Targets - Inches')
+  plt.grid(True)
   for i, txt, in enumerate(label):
     plt.annotate(txt, xy=(x_plots[i], y_plots[i]))
   plt.show()
@@ -267,7 +268,7 @@ def map_targets(targets):
 # ---------------- MAIN ---------------------# 
 
 #Get the sorted data, sort is by rssi. smallest to largest. 
-data = get_data(d.test01)
+data = get_data(d.test09)
 
 # Determine the number of targets based on the data
 # Data provided has rssi values between all targets

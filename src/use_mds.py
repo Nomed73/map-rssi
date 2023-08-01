@@ -5,6 +5,7 @@ import pprint as p
 
 def create_matrix(data, targets):
   matrix = []
+  target_labels = []
   length = len(targets)
 
   for r in range(0, length):
@@ -17,6 +18,7 @@ def create_matrix(data, targets):
         if p1 == data[d]['keys'][0]:
           if p2 == data[d]['keys'][1]:
             # row.append(convert_rssi_inches(data[d]['rssi']))
+            print(f"***** p1 = {p1}\tp2 = {p2} *****")
             row.append(data[d]['rssi'])
             # break
         elif p2 == data[d]['keys'][0]:
@@ -29,10 +31,17 @@ def create_matrix(data, targets):
           break           
       
     matrix.append(row)
-    np.matrix = matrix
+  
+  for target in targets:
+    for item in data:
+        if target in item['keys']:
+            target_labels.append(item['keys'][item['keys'].index(target) - 1][12:])
+            break
+        
+  np.matrix = matrix
   print(type(np.matrix))
   print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in np.matrix]))
-  return np.matrix
+  return np.matrix, target_labels
 
 def convert_rssi_inches(rssi):
   mp = -70
@@ -70,23 +79,21 @@ def mds_classic(distances, dimensions=2):
     # Take the SVD of the double-centered matrix and return the points from it
     U, S, Vt = np.linalg.svd(M)
     eigen_values = np.sqrt(S)
-    # return np.multiply(U[:, :dimensions], eigen_values[:dimensions])
     return [np.multiply(row, eigen_values)[:dimensions] for row in U]
 
-def plot_targets(target_locations):
+def plot_targets(target_locations, target_labels):
   
   # Extract x and y coordinates from the array
   x_plot = [point[0] for point in target_locations]
   y_plot = [point[1] for point in target_locations]
 
   plt.plot(x_plot, y_plot, 'X')
-  # plt.scatter(x = x_plot, y = y_plot)
   plt.grid(True)
-  plt.title('Targets')
+  plt.title('Targets - Matrix Method')
   for i, point in enumerate(target_locations):
-    # plt.text(point[0], point[1], f'Point {i+1}', ha='right', va='bottom')
-    plt.text(point[0], point[1], f'Point {i+1} ({point[0]:.2f}, {point[1]:.2f})', ha='right', va='bottom')
-  
+    label = target_labels[i]
+    plt.text(point[0], point[1], f'{label}\nPoint {i+1} ({point[0]:.2f}, {point[1]:.2f})', ha='right', va='bottom')
+    # plt.text(f'{label} ({x_plot:.2f}, {y_plot:.2f})', ha='right', va='bottom')  
   plt.show()
 
 #------------- MAIN ------------------#
@@ -94,11 +101,11 @@ def plot_targets(target_locations):
 data = d.test01
 targets = unique_targets(data)
 print(f"targets = {targets}")
-matrix = create_matrix(data, targets)
+matrix, target_labels = create_matrix(data, targets)
 target_locations = mds_classic(matrix)
 print(f"type of target_locations = {type(target_locations)}")
 print(target_locations)
-plot_targets(target_locations)
+plot_targets(target_locations, target_labels)
 
 
 ####  Convert rssi to distances
