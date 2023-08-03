@@ -20,6 +20,8 @@ def create_matrix(data, targets):
             # row.append(convert_rssi_inches(data[d]['rssi']))
             print(f"***** p1 = {p1}\tp2 = {p2} *****")
             row.append(data[d]['rssi'])
+            # if data[d]['keys'][0] not in target_labels:
+            #   target_labels.append
             # break
         elif p2 == data[d]['keys'][0]:
           if p1 == data[d]['keys'][1]:
@@ -32,11 +34,11 @@ def create_matrix(data, targets):
       
     matrix.append(row)
   
-  for target in targets:
-    for item in data:
-        if target in item['keys']:
-            target_labels.append(item['keys'][item['keys'].index(target) - 1][12:])
-            break
+  # for target in targets:
+  #   for item in data:
+  #       if target in item['keys']:
+  #           target_labels.append(item['keys'][item['keys'].index(target) - 1][12:])
+  #           break
   print(f"target lables: {target_labels}")
   np.matrix = matrix
   # print(type(np.matrix))
