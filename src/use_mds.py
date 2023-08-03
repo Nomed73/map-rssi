@@ -37,10 +37,10 @@ def create_matrix(data, targets):
         if target in item['keys']:
             target_labels.append(item['keys'][item['keys'].index(target) - 1][12:])
             break
-        
+  print(f"target lables: {target_labels}")
   np.matrix = matrix
-  print(type(np.matrix))
-  print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in np.matrix]))
+  # print(type(np.matrix))
+  # print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in np.matrix]))
   return np.matrix, target_labels
 
 def convert_rssi_inches(rssi):
@@ -93,7 +93,6 @@ def plot_targets(target_locations, target_labels):
   for i, point in enumerate(target_locations):
     label = target_labels[i]
     plt.text(point[0], point[1], f'{label}\nPoint {i+1} ({point[0]:.2f}, {point[1]:.2f})', ha='right', va='bottom')
-    # plt.text(f'{label} ({x_plot:.2f}, {y_plot:.2f})', ha='right', va='bottom')  
   plt.show()
 
 #------------- MAIN ------------------#
